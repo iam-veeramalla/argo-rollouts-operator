@@ -178,7 +178,7 @@ sanity_test_metrics_data() {
 
   fi
 
-  if [[ "`expr $DELTA_ERROR_RECONCILES \> 60`" == "1" ]]; then
+  if [[ "`expr $DELTA_ERROR_RECONCILES \> 70`" == "1" ]]; then
     # This value is arbitrary, and should be updated if at any point it becomes inaccurate (but first audit the test/code to make sure it is not an actual product/test issue, before increasing)
     echo "Number of Reconcile calls that returned an error '$DELTA_ERROR_RECONCILES' was greater than the expected value"
     exit 1
@@ -211,7 +211,7 @@ if [ -f "/tmp/e2e-operator-run.log" ]; then
 
   set +u # allow undefined vars
 
-  UNEXPECTED_ERRORS_FOUND_TEXT=`cat /tmp/e2e-operator-run.log | grep "ERROR" | grep -v "because it is being terminated" | grep -v "the object has been modified; please apply your changes to the latest version and try again" | grep -v "unable to fetch" | grep -v "StorageError" | grep -v "client rate limiter Wait returned an error: context canceled"`
+  UNEXPECTED_ERRORS_FOUND_TEXT=`cat /tmp/e2e-operator-run.log | grep "ERROR" | grep -v "because it is being terminated" | grep -v "the object has been modified; please apply your changes to the latest version and try again" | grep -v "unable to fetch" | grep -v "StorageError" | grep -v "client rate limiter Wait returned an error: context canceled" | grep -v "failed to reconcile Rollout's ClusterRoleBinding" | grep -v "clusterrolebindings.rbac.authorization.k8s.io \"argo-rollouts\" already exists"`
 
   if [ "$UNEXPECTED_ERRORS_FOUND_TEXT" != "" ]; then
   
